@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Pagos</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .jobs, .days {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Pagos</h1>
+        <form id="workForm">
+            <label for="workerName">Nombre completo del trabajador:</label>
+            <input type="text" id="workerName" placeholder="Ingresa el nombre completo" required>
+
+            <label for="jobs">Selecciona los trabajos realizados:</label>
+            <div class="jobs">
+                <label class="checkbox-item"><input type="checkbox" value="280"> Limpia Manual - $280</label>
+                <label class="checkbox-item"><input type="checkbox" value="200"> Trampeo - $200</label>
+                <label class="checkbox-item"><input type="checkbox" value="280"> Virosis - $280</label>
+                <label class="checkbox-item"><input type="checkbox" value="200"> Sexado - $200</label>
+                <label class="checkbox-item"><input type="checkbox" value="270"> Desbrote y saneo - $270</label>
+                <label class="checkbox-item"><input type="checkbox" value="270"> Cambiar Trampas - $270</label>
+                <label class="checkbox-item"><input type="checkbox" value="280"> A.P. Herbicida - $280</label>
+                <label class="checkbox-item"><input type="checkbox" value="280"> Riego y fugas - $280</label>
+                <label class="checkbox-item"><input type="checkbox" value="250"> Transplante - $250</label>
+                <label class="checkbox-item"><input type="checkbox" value="300"> Corte - $300</label>
+                <label class="checkbox-item"><input type="checkbox" value="350"> Empaque - $350</label>
+                <label class="checkbox-item"><input type="checkbox" value="270"> Lavar Fruta - $270</label>
+                <label class="checkbox-item"><input type="checkbox" value="350"> Estibador - $350</label>
+                <label class="checkbox-item"><input type="checkbox" value="280"> Grapador - $280</label>
+                <label class="checkbox-item"><input type="checkbox" value="280"> Fumigar Bomba - $280</label>
+            </div>
+
+            <label for="days">Selecciona los días trabajados:</label>
+            <div class="days">
+                <label class="checkbox-item"><input type="checkbox" value="Lunes"> Lunes</label>
+                <label class="checkbox-item"><input type="checkbox" value="Martes"> Martes</label>
+                <label class="checkbox-item"><input type="checkbox" value="Miércoles"> Miércoles</label>
+                <label class="checkbox-item"><input type="checkbox" value="Jueves"> Jueves</label>
+                <label class="checkbox-item"><input type="checkbox" value="Viernes"> Viernes</label>
+                <label class="checkbox-item"><input type="checkbox" value="Sábado"> Sábado</label>
+                <label class="checkbox-item"><input type="checkbox" value="Domingo"> Domingo</label>
+            </div>
+
+            <button type="button" onclick="calculatePay()">Calcular y Guardar</button>
+        </form>
+
+        <h2>Resultado:</h2>
+        <p id="result">Introduce los datos para calcular el pago.</p>
+    </div>
+
+    <script>
+        function calculatePay() {
+            const workerName = document.getElementById('workerName').value.trim();
+
+            // Obtener los trabajos realizados
+            const jobCheckboxes = document.querySelectorAll('.jobs .checkbox-item input[type="checkbox"]');
+            let totalPerDay = 0;
+            let selectedJobs = [];
+            jobCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    totalPerDay += parseInt(checkbox.value);
+                    selectedJobs.push(checkbox.dataset.name);
+                }
+            });
+
+            // Obtener los días trabajados
+            const dayCheckboxes = document.querySelectorAll('.days .checkbox-item input[type="checkbox"]');
+            let daysWorked = 0;
+            let selectedDays = [];
+            dayCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    daysWorked++;
+                    selectedDays.push(checkbox.value);
+                }
+            });
+
+            if (workerName && totalPerDay > 0 && daysWorked > 0) {
+                const total = totalPerDay * daysWorked;
+                const resultText = `Trabajador: ${workerName}\nTrabajos realizados: ${selectedJobs.join(', ')}\nDías trabajados: ${selectedDays.join(', ')}\nTotal: $${total}`;
+                document.getElementById('result').innerText = resultText;
+
+                // Crear archivo de texto
+                const blob = new Blob([resultText], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `${workerName.replace(/\s+/g, '_')}_pago.txt`;
+                link.click();
+            } else if (!workerName) {
+                document.getElementById('result').innerText = "Por favor, ingresa el nombre del trabajador.";
+            } else {
+                document.getElementById('result').innerText = "Por favor, selecciona al menos un trabajo y un día.";
+            }
+        }
+    </script>
+</body>
+</html>
